@@ -63,7 +63,7 @@
   "get-expiration-text": {
     "util": {
       "expires-in": "Expires {expiration}",
-      "expired": "Expired {expiration} ago",
+      "expired": "Expired {expiration}",
       "unknown": "Unknown",
       "infinity": "Valid until: ∞"
     }
