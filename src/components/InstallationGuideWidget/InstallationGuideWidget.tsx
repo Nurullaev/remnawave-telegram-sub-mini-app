@@ -23,7 +23,7 @@ export const InstallationGuideWidget = ({
     user,
     isCryptoLinkEnabled,
     redirectLink,
-                                            enabledLocales
+    enabledLocales
 }: {
     appsConfig: ISubscriptionPageAppConfig['platforms']
     user: GetSubscriptionInfoByShortUuidCommand.Response['response']

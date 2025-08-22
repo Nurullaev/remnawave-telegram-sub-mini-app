@@ -27,6 +27,11 @@ export function init(debug: boolean): void {
   initData.restore();
   void viewport.mount().then(() => {
     viewport.bindCssVars();
+
+    if (viewport.expand.isAvailable()) {
+      viewport.expand();
+    }
+
   }).catch(e => {
     consola.error('Something went wrong mounting the viewport', e);
   });

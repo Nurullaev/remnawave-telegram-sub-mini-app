@@ -46,10 +46,6 @@ function RootInner({ children }: PropsWithChildren) {
         miniApp.backgroundColor();
     }
 
-    if (viewport.expand.isAvailable()) {
-        viewport.expand();
-    }
-
   // Initialize the library.
   useClientOnce(() => {
     init(debug);
