@@ -6,6 +6,7 @@ import {
   mountMiniAppSync,
   bindThemeParamsCssVars,
   mountViewport,
+  viewport,
   bindViewportCssVars,
   mockTelegramEnv,
   type ThemeParams,
@@ -74,8 +75,13 @@ export async function init(options: {
     bindThemeParamsCssVars();
   }
 
+  if (viewport.mount.isAvailable()) {
+    viewport.isMounted(); // true
+  }
+
   if (mountViewport.isAvailable()) {
     mountViewport().then(() => {
+      viewport.expand();
       bindViewportCssVars();
     });
   }
