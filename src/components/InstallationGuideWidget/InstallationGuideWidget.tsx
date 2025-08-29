@@ -116,13 +116,13 @@ export const InstallationGuideWidget = ({
             const encodedUrl = `${urlScheme}${encoded}`
             window.open(encodedUrl, '_blank')
         } else if (urlScheme.startsWith('happ') && isCryptoLinkEnabled) {
-            return os === 'windows' || os === 'linux' || os === 'macos'
-                ? window.open(`${redirectLink}${user.happ.cryptoLink}`, '_blank')
-                : window.open(user.happ.cryptoLink, '_blank')
+            // return os === 'windows' || os === 'linux' || os === 'macos'
+                return window.open(`${redirectLink}${user.happ.cryptoLink}`, '_blank')
+                // : window.open(user.happ.cryptoLink, '_blank')
         } else {
-            return os === 'windows' || os === 'linux' || os === 'macos'
-                ? window.open(`${redirectLink}${urlScheme}${subscriptionUrl}`, '_blank')
-                : window.open(`${urlScheme}${subscriptionUrl}`)
+            // return os === 'windows' || os === 'linux' || os === 'macos'
+                return window.open(`${redirectLink}${urlScheme}${subscriptionUrl}`, '_blank')
+                // : window.open(`${urlScheme}${subscriptionUrl}`)
         }
     }
 
