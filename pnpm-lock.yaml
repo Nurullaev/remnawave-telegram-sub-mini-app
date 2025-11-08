@@ -32,6 +32,9 @@ importers:
       '@tabler/icons-react':
         specifier: ^3.31.0
         version: 3.34.1(react@19.1.1)
+      '@telegram-apps/init-data-node':
+        specifier: ^2.0.10
+        version: 2.0.10(typescript@5.9.2)
       '@telegram-apps/sdk-react':
         specifier: ^3.3.6
         version: 3.3.6(@types/react@19.1.9)(react@19.1.1)(typescript@5.9.2)
@@ -458,6 +461,10 @@ packages:
 
   '@telegram-apps/bridge@2.10.3':
     resolution: {integrity: sha512-mjbpxynr6g5EOQlpxuKQxDN+UTrtKLWBfJQs8BLQX0dkZVL+r7nQNAVzY2NtJHLUUCA+eUccq+yF7NkesnY46g==}
+
+  '@telegram-apps/init-data-node@2.0.10':
+    resolution: {integrity: sha512-hyJ0Qbc1Rqmog4OMS1neZo0PTBKDpOrXzy4EtEyXu8nAA8IK2iYJXnt3wRcvbYn6Qnkyh0wPEkIJmY8Hj3awPw==}
+    deprecated: This package is not supported anymore. Use @tma.js/init-data-node instead
 
   '@telegram-apps/navigation@1.0.14':
     resolution: {integrity: sha512-bqNgF/J8Po7ZtsELm3E1a6aPr7awwxO3sIqD8J6u12urOlGoW5+1KxKKbkPa58mgXuQdsltd8apI+OVy0IYiUA==}
@@ -2419,6 +2426,14 @@ snapshots:
       error-kid: 0.0.7
       mitt: 3.0.1
       valibot: 1.0.0(typescript@5.9.2)
+    transitivePeerDependencies:
+      - typescript
+
+  '@telegram-apps/init-data-node@2.0.10(typescript@5.9.2)':
+    dependencies:
+      '@telegram-apps/transformers': 2.2.6(typescript@5.9.2)
+      '@telegram-apps/types': 2.0.3
+      error-kid: 0.0.7
     transitivePeerDependencies:
       - typescript
 

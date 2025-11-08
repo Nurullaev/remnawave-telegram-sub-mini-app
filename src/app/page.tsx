@@ -5,7 +5,8 @@ import { useTranslations } from 'next-intl'
 import {Center, Container, Group, Stack, Title,Image} from '@mantine/core'
 import { fetchUserByTelegramId } from '@/api/fetchUserByTgId'
 import { fetchAppEnv } from '@/api/fetchAppEnv'
-import { initData, useSignal } from '@telegram-apps/sdk-react'
+import {initData, retrieveLaunchParams, useSignal,initDataRaw as _initDataRaw,
+} from '@telegram-apps/sdk-react'
 import { Loading } from '@/components/Loading/Loading'
 import { ofetch } from 'ofetch'
 import { LocaleSwitcher } from '@/components/LocaleSwitcher/LocaleSwitcher'
@@ -24,6 +25,7 @@ import {isOldFormat} from "@/utils/migrateConfig";
 
 export default function Home() {
     const t = useTranslations()
+    const initDataRaw = useSignal(_initDataRaw);
 
     const initDataState = useSignal(initData.state)
     const telegramId = initDataState?.user?.id
@@ -78,10 +80,11 @@ export default function Home() {
             const fetchSubscription = async () => {
                 setIsLoading(true)
                 try {
-                    const user = await fetchUserByTelegramId(telegramId)
+                    const user = await fetchUserByTelegramId(initDataRaw as string)
                     if (user) {
                         setSubscription(user)
                     }
+                    console.log('HERE')
 
                 } catch (error) {
                     const errorMessage =
@@ -152,9 +155,9 @@ export default function Home() {
                         <Title style={{ textAlign: 'center' }} order={4}>
                             {errorConnect === 'ERR_FATCH_USER' ? (
                                 t('main.page.component.error-connect')
-                            ) : (
+                            ) : errorConnect === 'ERR_PARSE_APPCONFIG' ? (
                                 t('main.page.component.error-parse-appconfig')
-                            )}
+                            ) : (JSON.stringify(errorConnect))}
 
                         </Title>
                         <ErrorConnection />

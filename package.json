@@ -18,6 +18,7 @@
     "@mantine/nprogress": "^7.17.3",
     "@remnawave/backend-contract": "0.7.9",
     "@tabler/icons-react": "^3.31.0",
+    "@telegram-apps/init-data-node": "^2.0.10",
     "@telegram-apps/sdk-react": "^3.3.6",
     "axios": "^1.9.0",
     "consola": "^3.4.2",

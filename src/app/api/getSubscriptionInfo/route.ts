@@ -4,8 +4,11 @@ import {
 } from '@remnawave/backend-contract'
 import axios, { AxiosError } from 'axios'
 import {consola} from "consola/browser";
+import { isValid, parse } from '@telegram-apps/init-data-node';
+
 
 const baseUrl = process.env.REMNAWAVE_PANEL_URL
+const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN!
 const isHappCryptoLinkEnabled = process.env.CRYPTO_LINK === 'true'
 
 const instance = axios.create({
@@ -24,20 +27,23 @@ if (process.env.AUTH_API_KEY) {
     instance.defaults.headers.common['X-Api-Key'] = `${process.env.AUTH_API_KEY}`
 }
 
-export async function GET(request: Request) {
-    try {
-        const { searchParams } = new URL(request.url)
-        const telegramId = searchParams.get('telegramId')
+export async function POST(request: Request) {
 
-        if (!telegramId) {
-            return new Response(JSON.stringify({ error: 'telegramId is required' }), {
-                status: 400
-            })
-        }
+    const parsedBody = await request.json()
+    const initData = parsedBody.initData
+
+
+    try {
+
+        const isDataValid = isValid(initData, telegramBotToken);
+        if (!isDataValid) return new Response(JSON.stringify({ error: 'Invalid initData' }), { status: 400 });
+
+        const { user } = parse(initData);
+        if (!user || !user.id) return new Response(JSON.stringify({ error: 'Invalid user data' }), { status: 400 });
 
         const result = await instance.request<GetUserByTelegramIdCommand.Response>({
             method: GetUserByTelegramIdCommand.endpointDetails.REQUEST_METHOD,
-            url: GetUserByTelegramIdCommand.url(telegramId)
+            url: GetUserByTelegramIdCommand.url(user.id.toString())
         })
 
         if (result.status !== 200) {
