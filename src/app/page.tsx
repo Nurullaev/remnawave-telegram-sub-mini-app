@@ -76,7 +76,7 @@ export default function Home() {
     }, [])
 
     useEffect(() => {
-        if (telegramId) {
+        if (telegramId && initDataRaw) {
             const fetchSubscription = async () => {
                 setIsLoading(true)
                 try {
@@ -84,7 +84,6 @@ export default function Home() {
                     if (user) {
                         setSubscription(user)
                     }
-                    console.log('HERE')
 
                 } catch (error) {
                     const errorMessage =
@@ -101,7 +100,7 @@ export default function Home() {
 
             fetchSubscription()
         }
-    }, [telegramId])
+    }, [telegramId, initDataRaw])
 
     useEffect(() => {
         const fetchConfig = async () => {

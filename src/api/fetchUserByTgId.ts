@@ -10,7 +10,6 @@ export async function fetchUserByTelegramId(initData: string
             },
             body: JSON.stringify({ initData })
         })
-        console.log(res)
 
         if (!res.ok) {
             if (res.status === 422) {
