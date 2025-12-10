@@ -1,6 +1,7 @@
 import {
+    EncryptHappCryptoLinkCommand,
     GetSubscriptionInfoByShortUuidCommand,
-    GetUserByTelegramIdCommand
+    GetUserByTelegramIdCommand,
 } from '@remnawave/backend-contract'
 import axios, { AxiosError } from 'axios'
 import {consola} from "consola/browser";
@@ -76,11 +77,20 @@ export async function POST(request: Request) {
 
         const response = subscriptionInfo.data.response
 
+
         if (isHappCryptoLinkEnabled) {
-            // we need to remove links, ssConfLinks and subscriptionUrl from response
+            // // we need to remove links, ssConfLinks and subscriptionUrl from response
             response.links = []
             response.ssConfLinks = {}
-            response.subscriptionUrl = response.happ.cryptoLink
+
+            const subscriptionInfo =
+                await instance.request<EncryptHappCryptoLinkCommand.Response>({
+                    method: EncryptHappCryptoLinkCommand.endpointDetails.REQUEST_METHOD,
+                    url: EncryptHappCryptoLinkCommand.url,
+                    data: { linkToEncrypt: response.subscriptionUrl}
+                })
+
+            response.subscriptionUrl = subscriptionInfo.data.response.encryptedLink
         }
 
         return new Response(JSON.stringify(response), { status: 200 })

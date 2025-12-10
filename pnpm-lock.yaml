@@ -27,8 +27,8 @@ importers:
         specifier: ^7.17.3
         version: 7.17.8(@mantine/core@7.17.8(@mantine/hooks@7.17.8(react@19.1.1))(@types/react@19.1.9)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(@mantine/hooks@7.17.8(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@remnawave/backend-contract':
-        specifier: 0.7.9
-        version: 0.7.9
+        specifier: 2.3.38
+        version: 2.3.38
       '@tabler/icons-react':
         specifier: ^3.31.0
         version: 3.34.1(react@19.1.1)
@@ -439,8 +439,8 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@remnawave/backend-contract@0.7.9':
-    resolution: {integrity: sha512-M+MhZ7yl3O1C5TWMuo54oB6FzC4VzYUnFUbqnVAGMZ5zO0YY0zLLAppMJTFzsn5Ou0pGQM1fd9NU7e2XDTcmlA==}
+  '@remnawave/backend-contract@2.3.38':
+    resolution: {integrity: sha512-zodN4AUYDKnkZmYKe4O9w6kqfd2417dSDayQ1lKUHLs//FXymf0u65tYUqoTnoLjexPQBvzXqSCecK9zEaMBCg==}
 
   '@rtsao/scc@1.1.0':
     resolution: {integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==}
@@ -2397,7 +2397,7 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@remnawave/backend-contract@0.7.9':
+  '@remnawave/backend-contract@2.3.38':
     dependencies:
       zod: 3.25.76
 

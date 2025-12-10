@@ -22,6 +22,7 @@ import {ISubscriptionPageAppConfig, TEnabledLocales} from '@/types/appList'
 import classes from './app.module.css'
 import { GetSubscriptionInfoByShortUuidCommand } from '@remnawave/backend-contract'
 import {isOldFormat} from "@/utils/migrateConfig";
+import {AnimatedBackground} from "@/components/AnimatedBackground/AnimatedBackground";
 
 export default function Home() {
     const t = useTranslations()
@@ -184,6 +185,7 @@ export default function Home() {
     if (subscriptionLoaded && subscription)
         return (
             <Container my="xl" size="xl">
+                <AnimatedBackground/>
                 <Stack gap="xl">
                     <Group justify="space-between">
                         <Group gap="xs">

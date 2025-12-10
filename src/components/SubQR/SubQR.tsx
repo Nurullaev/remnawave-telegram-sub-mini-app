@@ -1,7 +1,7 @@
 import {
     IconBrandDiscord,
     IconBrandTelegram,
-    IconBrandVk,
+    IconBrandVk, IconCopy,
     IconLink,
     IconMessageChatbot
 } from '@tabler/icons-react'
@@ -18,8 +18,10 @@ export const SubscriptionLinkWidget = ({subscription, supportUrl }: {subscriptio
     const clipboard = useClipboard({ timeout: 10000 })
     const subscriptionQrCode = renderSVG(subscription, {
         whiteColor: '#161B22',
-        blackColor: '#3CC9DB'
+        blackColor: '#22d3ee'
     })
+
+
 
     const [open, setOpen] = useState(false)
 
@@ -30,7 +32,7 @@ export const SubscriptionLinkWidget = ({subscription, supportUrl }: {subscriptio
         notifications.show({
             title: t('subscription-link.widget.link-copied'),
             message: t('subscription-link.widget.link-copied-to-clipboard'),
-            color: 'teal'
+            color: 'cyan'
         })
         clipboard.copy(subscription)
     }
@@ -48,17 +50,23 @@ export const SubscriptionLinkWidget = ({subscription, supportUrl }: {subscriptio
 
         const { icon: Icon, color } = matchedPlatform
             ? matchedPlatform[1]
-            : { icon: IconMessageChatbot, color: 'teal' }
+            : { icon: IconMessageChatbot, color: 'cyan' }
 
         return (
             <ActionIcon
                 c={color}
                 component="a"
+                radius="md"
                 href={supportUrl}
                 rel="noopener noreferrer"
                 size="xl"
                 target="_blank"
                 variant="default"
+                style={{
+                    background: 'rgba(255, 255, 255, 0.02)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    transition: 'all 0.2s ease'
+                }}
             >
                 <Icon />
             </ActionIcon>
@@ -74,33 +82,74 @@ export const SubscriptionLinkWidget = ({subscription, supportUrl }: {subscriptio
                     <Stack align="center">
                         <Image
                             src={`data:image/svg+xml;utf8,${encodeURIComponent(subscriptionQrCode)}`}
+                            style={{ borderRadius: 'var(--mantine-radius-md)' }}
                         />
-                        <Text fw={600} size="lg" ta="center">
+                        <Text fw={600} size="lg" ta="center" c="white">
                             {t('subscription-link.widget.scan-qr-code')}
                         </Text>
                         <Text c="dimmed" size="sm" ta="center">
                             {t('subscription-link.widget.line-1')}
                         </Text>
 
-                        <Button fullWidth onClick={handleCopy} variant="filled">
+                        <Button
+                            fullWidth
+                            onClick={handleCopy}
+                            variant="light"
+                            radius="md"
+                            leftSection={<IconCopy />}
+                        >
                             {t('subscription-link.widget.copy-link')}
                         </Button>
                     </Stack>
+                    // <Stack align="center">
+                    //     <Image
+                    //         src={`data:image/svg+xml;utf8,${encodeURIComponent(subscriptionQrCode)}`}
+                    //     />
+                    //     <Text fw={600} size="lg" ta="center">
+                    //         {t('subscription-link.widget.scan-qr-code')}
+                    //     </Text>
+                    //     <Text c="dimmed" size="sm" ta="center">
+                    //         {t('subscription-link.widget.line-1')}
+                    //     </Text>
+                    //
+                    //     <Button fullWidth onClick={handleCopy} variant="filled">
+                    //         {t('subscription-link.widget.copy-link')}
+                    //     </Button>
+                    // </Stack>
                 )}
 
             </Modal>
-        <Group gap="xs">
-            <ActionIcon
-                onClick={() => {
-                    setOpen(true)
-                }}
-                size="xl"
-                variant="default"
-            >
-                <IconLink />
-            </ActionIcon>
-            {supportUrl && renderSupportLink(supportUrl)}
-        </Group>
+            <Group gap="xs">
+                <ActionIcon
+                    onClick={() => {
+                        setOpen(true)
+                    }}
+                    size="xl"
+                    radius="md"
+                    variant="default"
+                    style={{
+                        background: 'rgba(255, 255, 255, 0.02)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        transition: 'all 0.2s ease'
+                    }}
+                >
+                    <IconLink />
+                </ActionIcon>
+
+                {supportUrl && renderSupportLink(supportUrl)}
+            </Group>
+        {/*<Group gap="xs">*/}
+        {/*    <ActionIcon*/}
+        {/*        onClick={() => {*/}
+        {/*            setOpen(true)*/}
+        {/*        }}*/}
+        {/*        size="xl"*/}
+        {/*        variant="default"*/}
+        {/*    >*/}
+        {/*        <IconLink />*/}
+        {/*    </ActionIcon>*/}
+        {/*    {supportUrl && renderSupportLink(supportUrl)}*/}
+        {/*</Group>*/}
 
         </>
 

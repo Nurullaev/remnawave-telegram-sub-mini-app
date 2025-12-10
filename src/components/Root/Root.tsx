@@ -21,7 +21,6 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { ErrorPage } from '@/components/ErrorPage';
 import {Loading} from "@/components/Loading/Loading";
 import { useDidMount } from '@/hooks/useDidMount';
-import { useClientOnce } from '@/hooks/useClientOnce';
 import { setLocale } from '@/core/i18n/locale';
 import {theme} from "@/config/theme";
 

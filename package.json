@@ -1,6 +1,6 @@
 {
   "name": "remnawave-telegram-sub-mini-app",
-  "version": "2.2.3",
+  "version": "2.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -16,7 +16,7 @@
     "@mantine/modals": "^7.17.3",
     "@mantine/notifications": "^7.17.3",
     "@mantine/nprogress": "^7.17.3",
-    "@remnawave/backend-contract": "0.7.9",
+    "@remnawave/backend-contract": "2.3.38",
     "@tabler/icons-react": "^3.31.0",
     "@telegram-apps/init-data-node": "^2.0.10",
     "@telegram-apps/sdk-react": "^3.3.6",
