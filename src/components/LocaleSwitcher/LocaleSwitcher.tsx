@@ -3,12 +3,11 @@
 import { useLocale } from 'next-intl';
 import {FC, useState} from 'react';
 
-import {Button, Flex, Group, Menu, Text} from "@mantine/core";
+import {ActionIcon, Button, Flex, Group, Menu, Text} from "@mantine/core";
 import { localesMap } from '@/core/i18n/config';
 import { setLocale } from '@/core/i18n/locale';
 import { Locale } from '@/core/i18n/types';
-import {IconChevronDown} from "@tabler/icons-react";
-import classes from './LocaleSwitcher.module.css'
+import {IconLanguage} from "@tabler/icons-react";
 
 
 
@@ -22,8 +21,6 @@ export const LocaleSwitcher: FC = () => {
     setLocale(locale);
 
   }
-
-  const selected = localesMap.find((item) => item.value === locale) || localesMap[0]
 
   const items = localesMap.map((item) => (
       <Menu.Item
@@ -41,24 +38,26 @@ export const LocaleSwitcher: FC = () => {
 
   return (
       <Flex justify="center" mt={24}>
-      <Menu
-          width={120}
-          onClose={() => setOpened(false)}
-          onOpen={() => setOpened(true)}
-          radius="md"
-          withinPortal
-      >
-        <Menu.Target>
-          <Button color="grape" data-expanded={opened || undefined}>
-            <Group gap="xs">
-              <Text>{selected.emoji}</Text>
-              <span>{selected.label}</span>
-              <IconChevronDown className={classes.icon} size={16} stroke={1.5} />
-            </Group>
-          </Button>
-        </Menu.Target>
-        <Menu.Dropdown >{items}</Menu.Dropdown>
-      </Menu>
+          <Menu position="bottom-end" width={150} withinPortal
+                onClose={() => setOpened(false)}
+                onOpen={() => setOpened(true)}>
+              <Menu.Target>
+                  <ActionIcon
+                      color="gray"
+                      size="xl"
+                      radius="md"
+                      variant="default"
+                      style={{
+                          background: 'rgba(255, 255, 255, 0.02)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          transition: 'all 0.2s ease'
+                      }}
+                  >
+                      <IconLanguage size={22} />
+                  </ActionIcon>
+              </Menu.Target>
+              <Menu.Dropdown>{items}</Menu.Dropdown>
+          </Menu>
       </Flex>
   );
 };
