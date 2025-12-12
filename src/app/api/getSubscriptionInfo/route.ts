@@ -55,7 +55,7 @@ export async function POST(request: Request) {
         }
 
         if (result.data.response.length === 0) {
-            return new Response(JSON.stringify({ error: 'Users not found' }), {
+            return new Response(JSON.stringify({ message: 'Users not found' }), {
                 status: 422
             })
         }
@@ -107,13 +107,13 @@ export async function POST(request: Request) {
 
             consola.error('Error:', error)
 
-            return new Response(JSON.stringify({ error: 'Failed to get subscription info' }), {
+            return new Response(JSON.stringify({ message: 'Failed to get subscription info' }), {
                 status: 500
             })
         }
 
         consola.error('Unexpected error:', error)
-        return new Response(JSON.stringify({ error: 'An unexpected error occurred' }), {
+        return new Response(JSON.stringify({ message: 'An unexpected error occurred' }), {
             status: 500
         })
     }
