@@ -254,10 +254,11 @@ export const InstallationGuideWidget = ({
                             withScrollArea={false}
                             styles={{
                                 input: {
+                                    fontSize: '16px',
                                     background: 'rgba(255, 255, 255, 0.02)',
                                     border: '1px solid rgba(255, 255, 255, 0.1)',
-                                    color: 'white'
-                                }
+                                    color: 'white',
+                                },
                             }}
                         />
                     )}
