@@ -1,0 +1,12 @@
+services:
+  remnawave-mini-app:
+    image: ghcr.io/maposia/remnawave-telegram-sub-mini-app:latest
+    container_name: remnawave-telegram-mini-app
+    hostname: remnawave-telegram-mini-app
+    env_file:
+      - .env
+    restart: always
+    volumes:
+      - ./app-config.json:/app/public/assets/app-config.json
+    ports:
+      - '127.0.0.1:3020:3020'

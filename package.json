@@ -9,6 +9,11 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
   "dependencies": {
     "@mantine/core": "^7.17.3",
     "@mantine/dates": "^7.17.3",
@@ -21,7 +26,9 @@
     "@telegram-apps/init-data-node": "^2.0.10",
     "@telegram-apps/sdk-react": "^3.3.6",
     "axios": "^1.9.0",
+    "commitizen": "^4.3.1",
     "consola": "^3.4.2",
+    "cz-conventional-changelog": "^3.3.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
     "eruda": "^3.0.1",
