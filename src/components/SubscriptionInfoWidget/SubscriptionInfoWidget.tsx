@@ -1,7 +1,7 @@
 import { useLocale, useTranslations } from 'next-intl'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import {Card, Group, SimpleGrid, Stack, Text, ThemeIcon, Title} from '@mantine/core'
+import { Card, Group, SimpleGrid, Stack, Text, ThemeIcon, Title } from '@mantine/core'
 import {
     IconAlertCircle,
     IconArrowsUpDown,
@@ -12,10 +12,9 @@ import {
 } from '@tabler/icons-react'
 import { InfoBlock } from '@/components/InfoBlock/InfoBlock'
 
-import { calculateDaysLeft, getExpirationTextUtil } from '@/utils/utils'
+import { calculateDaysLeft, getExpirationTextUtil } from '@/utils/configParser'
 import { GetSubscriptionInfoByShortUuidCommand } from '@remnawave/backend-contract'
-import {useMediaQuery} from "@mantine/hooks";
-import i18n from "@/core/i18n/i18n";
+import { useMediaQuery } from '@mantine/hooks'
 
 dayjs.extend(relativeTime)
 
@@ -67,7 +66,6 @@ export const SubscriptionInfoWidget = ({
     }
 
     const statusInfo = getStatusAndIcon()
-
 
     return (
         <Card p={{ base: 'sm', xs: 'md', sm: 'lg', md: 'xl' }} radius="lg" className="glass-card">
@@ -164,13 +162,11 @@ export const SubscriptionInfoWidget = ({
                         icon={<IconArrowsUpDown size={16} />}
                         title={t('subscription-info.widget.bandwidth')}
                         value={`${user.user.trafficUsed} / ${
-                            user.user.trafficLimit === '0'
-                                ? '∞'
-                                : user.user.trafficLimit
+                            user.user.trafficLimit === '0' ? '∞' : user.user.trafficLimit
                         }`}
                     />
                 </SimpleGrid>
-        </Stack>
-      </Card>
+            </Stack>
+        </Card>
     )
 }

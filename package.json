@@ -1,62 +1,70 @@
 {
-  "name": "remnawave-telegram-sub-mini-app",
-  "version": "2.3.4",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "dev:https": "next dev --experimental-https",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "commit": "cz"
-  },
-  "config": {
-    "commitizen": {
-      "path": "cz-conventional-changelog"
+    "name": "remnawave-telegram-sub-mini-app",
+    "version": "2.3.4",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "dev:https": "next dev --experimental-https",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "commit": "cz"
+    },
+    "config": {
+        "commitizen": {
+            "path": "cz-conventional-changelog"
+        }
+    },
+    "dependencies": {
+        "@gfazioli/mantine-spinner": "^2.3.9",
+        "@mantine/core": "^8.3.10",
+        "@mantine/dates": "^8.3.10",
+        "@mantine/hooks": "^8.3.10",
+        "@mantine/modals": "^8.3.10",
+        "@mantine/notifications": "^8.3.10",
+        "@mantine/nprogress": "^8.3.10",
+        "@remnawave/backend-contract": "2.4.1",
+        "@remnawave/subscription-page-types": "^0.3.3",
+        "@tabler/icons-react": "^3.31.0",
+        "@telegram-apps/init-data-node": "^2.0.10",
+        "@telegram-apps/sdk-react": "^3.3.9",
+        "axios": "1.12.0",
+        "commitizen": "^4.3.1",
+        "consola": "^3.4.2",
+        "cz-conventional-changelog": "^3.3.0",
+        "dayjs": "^1.11.13",
+        "dotenv": "^16.4.7",
+        "eruda": "^3.0.1",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-prettier": "^5.5.4",
+        "i18next-browser-languagedetector": "^8.2.0",
+        "lottie-react": "^2.4.1",
+        "next": "15.5.9",
+        "next-intl": "^3.17.6",
+        "ofetch": "^1.5.1",
+        "postcss": "^8.5.3",
+        "postcss-preset-mantine": "^1.17.0",
+        "postcss-simple-vars": "^7.0.1",
+        "prettier": "^3.7.4",
+        "pretty-bytes": "^7.1.0",
+        "react": "19.1.1",
+        "react-dom": "19.1.1",
+        "react-icons": "^5.5.0",
+        "react-snowfall": "^2.4.0",
+        "ufo": "^1.6.1",
+        "uqr": "^0.1.2",
+        "zustand": "^5.0.9"
+    },
+    "devDependencies": {
+        "@types/node": "^20",
+        "@types/react": "19.1.9",
+        "@types/react-dom": "19.1.7",
+        "eslint": "^8",
+        "eslint-config-next": "15.4.5",
+        "typescript": "^5"
+    },
+    "overrides": {
+        "@types/react": "19.1.9",
+        "@types/react-dom": "19.1.7"
     }
-  },
-  "dependencies": {
-    "@mantine/core": "^8.3.10",
-    "@mantine/dates": "^8.3.10",
-    "@mantine/hooks": "^8.3.10",
-    "@mantine/modals": "^8.3.10",
-    "@mantine/notifications": "^8.3.10",
-    "@mantine/nprogress": "^8.3.10",
-    "@remnawave/backend-contract": "2.4.1",
-    "@tabler/icons-react": "^3.31.0",
-    "@telegram-apps/init-data-node": "^2.0.10",
-    "@telegram-apps/sdk-react": "^3.3.9",
-    "axios": "1.12.0",
-    "commitizen": "^4.3.1",
-    "consola": "^3.4.2",
-    "cz-conventional-changelog": "^3.3.0",
-    "dayjs": "^1.11.13",
-    "dotenv": "^16.4.7",
-    "eruda": "^3.0.1",
-    "lottie-react": "^2.4.1",
-    "next": "15.5.9",
-    "next-intl": "^3.17.6",
-    "ofetch": "^1.5.1",
-    "postcss": "^8.5.3",
-    "postcss-preset-mantine": "^1.17.0",
-    "postcss-simple-vars": "^7.0.1",
-    "pretty-bytes": "^7.1.0",
-    "react": "19.1.1",
-    "react-dom": "19.1.1",
-    "react-icons": "^5.5.0",
-    "react-snowfall": "^2.4.0",
-    "uqr": "^0.1.2"
-  },
-  "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "19.1.9",
-    "@types/react-dom": "19.1.7",
-    "eslint": "^8",
-    "eslint-config-next": "15.4.5",
-    "typescript": "^5"
-  },
-  "overrides": {
-    "@types/react": "19.1.9",
-    "@types/react-dom": "19.1.7"
-  }
 }

@@ -1,238 +1,153 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useTranslations } from 'next-intl'
-import {Center, Container, Group, Stack, Title,Image} from '@mantine/core'
-import { fetchUserByTelegramId } from '@/api/fetchUserByTgId'
-import { fetchAppEnv } from '@/api/fetchAppEnv'
-import {initData, retrieveLaunchParams, useSignal,initDataRaw as _initDataRaw,
-} from '@telegram-apps/sdk-react'
-import { Loading } from '@/components/Loading/Loading'
-import { ofetch } from 'ofetch'
-import { LocaleSwitcher } from '@/components/LocaleSwitcher/LocaleSwitcher'
+import { Center, Container, Group, Stack, Title, Image, Box } from '@mantine/core'
+import { LanguagePicker } from '@/components/LanguagePicker/LanguagePicker'
+import { AnimatedBackground } from '@/components/AnimatedBackground/AnimatedBackground'
+import { Snowfall } from 'react-snowfall'
+import { TSubscriptionPagePlatformKey } from '@remnawave/subscription-page-types'
+import {
+    useSubscriptionConfig,
+    useSubscriptionConfigStoreActions,
+    useCurrentLang
+} from '@/store/subscriptionConfig'
+import { Header } from '@/components/Header/Header'
+import { useOs } from '@mantine/hooks'
+import {
+    AccordionBlockRenderer,
+    CardsBlockRenderer,
+    InstallationGuideConnector,
+    MinimalBlockRenderer,
+    TimelineBlockRenderer
+} from '@/components/InstallationGuide'
+import {
+    SubscriptionInfoCards,
+    SubscriptionInfoCollapsed,
+    SubscriptionInfoExpanded
+} from '@/components/SubscriptionInfo'
+import { useAppConfigStoreInfo } from '@/store/appConfig'
+import { useSubscription } from '@/store/subscriptionInfo'
 import { SubscribeCta } from '@/components/SubscribeCTA/SubscribeCTA'
-import { ErrorConnection } from '@/components/ErrorConnection/ErrorConnection'
-import {SubscriptionLinkWidget} from '@/components/SubQR/SubQR'
-import { SubscriptionInfoWidget } from '@/components/SubscriptionInfoWidget/SubscriptionInfoWidget'
-import { InstallationGuideWidget } from '@/components/InstallationGuideWidget/InstallationGuideWidget'
-import { consola } from "consola/browser";
+import { useTranslations } from 'next-intl'
 
-import {ISubscriptionPageAppConfig, TEnabledLocales} from '@/types/appList'
+function osToPlatform(os: string): TSubscriptionPagePlatformKey | undefined {
+    switch (os) {
+        case 'android':
+            return 'android'
+        case 'ios':
+            return 'ios'
+        case 'linux':
+            return 'linux'
+        case 'macos':
+            return 'macos'
+        case 'windows':
+            return 'windows'
+        default:
+            return undefined
+    }
+}
 
-import classes from './app.module.css'
-import { GetSubscriptionInfoByShortUuidCommand } from '@remnawave/backend-contract'
-import {isOldFormat} from "@/utils/migrateConfig";
-import {AnimatedBackground} from "@/components/AnimatedBackground/AnimatedBackground";
-import {Snowfall} from "react-snowfall";
+const BLOCK_RENDERERS = {
+    cards: CardsBlockRenderer,
+    timeline: TimelineBlockRenderer,
+    accordion: AccordionBlockRenderer,
+    minimal: MinimalBlockRenderer
+} as const
+
+const SUBSCRIPTION_INFO_BLOCK_RENDERERS = {
+    cards: SubscriptionInfoCards,
+    collapsed: SubscriptionInfoCollapsed,
+    expanded: SubscriptionInfoExpanded,
+    hidden: null
+} as const
 
 export default function Home() {
+    const config = useSubscriptionConfig()
+
     const t = useTranslations()
-    const initDataRaw = useSignal(_initDataRaw);
-
-    const initDataState = useSignal(initData.state)
-    const telegramId = initDataState?.user?.id
-    const [subscription, setSubscription] = useState<
-        GetSubscriptionInfoByShortUuidCommand.Response['response'] | null
-    >(null)
-    const [subscriptionLoaded, setSubscriptionLoaded] = useState(false)
-    const [appsConfig, setAppsConfig] = useState<ISubscriptionPageAppConfig | null>(null)
-    const [isLoading, setIsLoading] = useState(true)
-    const [publicEnv, setPublicEnv] = useState<{
-        cryptoLink: boolean
-        buyLink: string
-        redirectLink: string
-        isSnowflakeEnabled: boolean
-    } | null>(null)
-
-    const [errorConnect, setErrorConnect] = useState<string | null>(null)
-
-    let additionalLocales: TEnabledLocales[] = ['en', 'ru', 'fa', 'zh']
-
-    if (appsConfig && appsConfig.config.additionalLocales !== undefined) {
-        additionalLocales = [
-            'en',
-            ...appsConfig.config.additionalLocales.filter((locale) =>
-                ['fa', 'ru', 'zh'].includes(locale)
-            )
-        ]
-    }
-
+    const subscription = useSubscription()
+    const currentLang = useCurrentLang()
+    const { setLanguage } = useSubscriptionConfigStoreActions()
+    const os = useOs({ getValueInEffect: false })
+    const { appConfig } = useAppConfigStoreInfo()
 
     const activeSubscription =
         subscription?.user?.userStatus && subscription?.user?.userStatus === 'ACTIVE'
 
-    useEffect(() => {
-        setIsLoading(true)
+    const hasPlatformApps: Record<TSubscriptionPagePlatformKey, boolean> = {
+        ios: Boolean(config.platforms.ios?.apps.length),
+        android: Boolean(config.platforms.android?.apps.length),
+        linux: Boolean(config.platforms.linux?.apps.length),
+        macos: Boolean(config.platforms.macos?.apps.length),
+        windows: Boolean(config.platforms.windows?.apps.length),
+        androidTV: Boolean(config.platforms.androidTV?.apps.length),
+        appleTV: Boolean(config.platforms.appleTV?.apps.length)
+    }
 
-        const fetchConfig = async () => {
-            try {
-                const cofingEnv = await fetchAppEnv()
-                if (cofingEnv) setPublicEnv(cofingEnv)
-            } catch (error) {
-                consola.error('Failed to fetch app config:', error)
-            } finally {
-                setIsLoading(false)
-            }
-        }
+    const atLeastOnePlatformApp = Object.values(hasPlatformApps).some((value) => value)
 
-        fetchConfig()
-    }, [])
+    const SubscriptionInfoBlockRenderer =
+        SUBSCRIPTION_INFO_BLOCK_RENDERERS[config.uiConfig.subscriptionInfoBlockType]
 
-    useEffect(() => {
-        if (telegramId && initDataRaw) {
-            const fetchSubscription = async () => {
-                setIsLoading(true)
-                try {
-                    const user = await fetchUserByTelegramId(initDataRaw as string)
-                    if (user) {
-                        setSubscription(user)
-                    }
-
-                } catch (error) {
-                    const errorMessage =
-                        error instanceof Error ? error.message : 'Unknown error occurred'
-                    if (errorMessage !== 'Users not found') {
-                        setErrorConnect('ERR_FATCH_USER')
-                    }
-                    consola.error('Failed to fetch subscription:', error)
-                } finally {
-                    setSubscriptionLoaded(true)
-                    setIsLoading(false)
-                }
-            }
-
-            fetchSubscription()
-        }
-    }, [telegramId, initDataRaw])
-
-    useEffect(() => {
-        const fetchConfig = async () => {
-            try {
-                const tempConfig = await ofetch<ISubscriptionPageAppConfig>(
-                    `/assets/app-config.json?v=${Date.now()}`,
-                    {
-                        parseResponse: JSON.parse
-                    }
-                )
-
-                let newConfig: ISubscriptionPageAppConfig | null = null
-
-                if (isOldFormat(tempConfig)) {
-                    consola.warn('Old config format detected, migrating to new format...')
-                    newConfig = {
-                        config: {
-                            additionalLocales: ['ru', 'fa', 'zh']
-                        },
-                        platforms: {
-                            ios: tempConfig.ios,
-                            android: tempConfig.android,
-                            windows: tempConfig.pc,
-                            macos: tempConfig.pc,
-                            linux: [],
-                            androidTV: [],
-                            appleTV: []
-                        }
-                    }
-                } else {
-                    newConfig = tempConfig
-                }
-
-                setAppsConfig(newConfig)
-            } catch (error) {
-                setErrorConnect('ERR_PARSE_APPCONFIG')
-                consola.error('Failed to fetch app config:', error)
-            } finally {
-                setIsLoading(false)
-            }
-        }
-
-        fetchConfig()
-    }, [])
-
-    if (errorConnect)
+    if (!activeSubscription)
         return (
-            <Container className={classes.main} my="xl" size="xl">
-                <Center>
-                    <Stack gap="xl">
-                        <Title style={{ textAlign: 'center' }} order={4}>
-                            {errorConnect === 'ERR_FATCH_USER' ? (
-                                t('main.page.component.error-connect')
-                            ) : errorConnect === 'ERR_PARSE_APPCONFIG' ? (
-                                t('main.page.component.error-parse-appconfig')
-                            ) : (JSON.stringify(errorConnect))}
-
-                        </Title>
-                        <ErrorConnection />
-                    </Stack>
-                </Center>
-            </Container>
-        )
-
-    if (isLoading || !appsConfig) return <Loading />
-
-    if (subscriptionLoaded && !subscription)
-        return (
-            <Container className={classes.main} my="xl" size="xl">
-                <Center>
+            <Box
+                style={{
+                    height: '100vh',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}
+            >
+                <Container size="xl">
                     <Stack gap="xl">
                         <Title style={{ textAlign: 'center' }} order={4}>
                             {t('main.page.component.no-sub')}
                         </Title>
-                        <SubscribeCta buyLink={publicEnv?.buyLink} />
+                        <SubscribeCta />
+
+                        <Center mt={20}>
+                            <LanguagePicker
+                                currentLang={currentLang}
+                                locales={config.locales}
+                                onLanguageChange={setLanguage}
+                            />
+                        </Center>
                     </Stack>
+                </Container>
+            </Box>
+        )
+
+    return (
+        <Box style={{ position: 'relative', marginBottom: 20, padding: 0 }}>
+            {appConfig?.isSnowflakeEnabled ? (
+                <Snowfall style={{ position: 'fixed', zIndex: 2 }} speed={[0, 1]} />
+            ) : (
+                <AnimatedBackground />
+            )}
+            <Header />
+            <Container style={{ position: 'relative', marginBottom: 20 }} size="xl">
+                <Stack style={{ zIndex: 2 }} gap="xl">
+                    {SubscriptionInfoBlockRenderer && <SubscriptionInfoBlockRenderer />}
+
+                    {atLeastOnePlatformApp && (
+                        <InstallationGuideConnector
+                            BlockRenderer={
+                                BLOCK_RENDERERS[config.uiConfig.installationGuidesBlockType]
+                            }
+                            hasPlatformApps={hasPlatformApps}
+                            platform={osToPlatform(os)}
+                        />
+                    )}
+                </Stack>
+                <Center mt={20}>
+                    <LanguagePicker
+                        currentLang={currentLang}
+                        locales={config.locales}
+                        onLanguageChange={setLanguage}
+                    />
                 </Center>
             </Container>
-        )
-
-    if (subscriptionLoaded && subscription)
-        return (
-            <Container style={{position: 'relative'}}  my="xl" size="xl">
-                {publicEnv?.isSnowflakeEnabled ? <Snowfall style={{ position: 'fixed' }} /> : <AnimatedBackground/>}
-                <Stack gap="xl">
-                    <Group justify="space-between">
-                        <Group gap="xs">
-                            {appsConfig.config.branding?.logoUrl && (
-                                <Image
-                                    alt="logo"
-                                    fit="contain"
-                                    src={appsConfig.config.branding.logoUrl}
-                                    style={{
-                                        maxWidth: '36px',
-                                        maxHeight: '36px',
-                                        width: 'auto',
-                                        height: 'auto'
-                                    }}
-                                />
-
-                            )}
-                            <Title order={4}>{appsConfig.config.branding?.name || t('main.page.component.podpiska')}</Title>
-                        </Group>
-                        <Group gap="xs">
-                            {!publicEnv?.cryptoLink && (
-                                <SubscriptionLinkWidget subscription={subscription.subscriptionUrl} supportUrl={appsConfig.config.branding?.supportUrl} />
-                            )}
-                        </Group>
-                    </Group>
-                    <Stack gap="xl">
-                        <SubscriptionInfoWidget user={subscription} />
-                        {activeSubscription ? (
-                            <InstallationGuideWidget
-                                user={subscription}
-                                appsConfig={appsConfig.platforms}
-                                isCryptoLinkEnabled={publicEnv?.cryptoLink}
-                                redirectLink={publicEnv?.redirectLink}
-                                enabledLocales={additionalLocales}
-                            />
-                        ) : (
-                            <SubscribeCta buyLink={publicEnv?.buyLink} />
-                        )}
-                    </Stack>
-                </Stack>
-                <LocaleSwitcher />
-                {/*</div>*/}
-
-            </Container>
-        )
-
-    return null
+        </Box>
+    )
 }
