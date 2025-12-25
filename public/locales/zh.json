@@ -1,0 +1,13 @@
+{
+    "main": {
+        "page": {
+            "component": {
+                "buy": "购买订阅",
+                "no-sub": "你还没有订阅",
+                "error-connect": "连接错误",
+                "error-parse-appconfig": "App-config 处理错误",
+                "refresh": "刷新"
+            }
+        }
+    }
+}

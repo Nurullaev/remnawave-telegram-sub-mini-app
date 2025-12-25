@@ -1,40 +1,42 @@
 import {
     IconBrandDiscord,
     IconBrandTelegram,
-    IconBrandVk, IconCopy,
+    IconBrandVk,
+    IconCopy,
     IconLink,
     IconMessageChatbot
 } from '@tabler/icons-react'
-import {ActionIcon, Button, Group, Image, Modal, Stack, Text} from '@mantine/core'
+import { ActionIcon, Button, Group, Image, Modal, Stack, Text } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useClipboard } from '@mantine/hooks'
 import { renderSVG } from 'uqr'
 
-import {useTranslations} from "next-intl";
-import {useState} from "react";
+import { useState } from 'react'
+import { useTranslation } from '@/hooks/useTranslations'
+import { useSubscription } from '@/store/subscriptionInfo'
 
-export const SubscriptionLinkWidget = ({subscription, supportUrl }: {subscription: string, supportUrl?: string }) => {
-    const t = useTranslations();
+export const SubscriptionLinkWidget = ({ supportUrl }: { supportUrl: string }) => {
+    const { t, baseTranslations } = useTranslation()
+    const subscription = useSubscription()
+
     const clipboard = useClipboard({ timeout: 10000 })
-    const subscriptionQrCode = renderSVG(subscription, {
+
+    const subscriptionQrCode = renderSVG(subscription.subscriptionUrl, {
         whiteColor: '#161B22',
         blackColor: '#22d3ee'
     })
-
-
 
     const [open, setOpen] = useState(false)
 
     if (!subscription) return null
 
-
     const handleCopy = () => {
         notifications.show({
-            title: t('subscription-link.widget.link-copied'),
-            message: t('subscription-link.widget.link-copied-to-clipboard'),
+            title: t(baseTranslations.linkCopied),
+            message: t(baseTranslations.linkCopiedToClipboard),
             color: 'cyan'
         })
-        clipboard.copy(subscription)
+        clipboard.copy(subscription.subscriptionUrl)
     }
 
     const renderSupportLink = (supportUrl: string) => {
@@ -74,10 +76,8 @@ export const SubscriptionLinkWidget = ({subscription, supportUrl }: {subscriptio
     }
 
     return (
-
         <>
-
-            <Modal opened={open} onClose={()=> setOpen(false)} title={t('subscription-link.widget.get-link')}>
+            <Modal opened={open} onClose={() => setOpen(false)} title={t(baseTranslations.getLink)}>
                 {subscriptionQrCode && (
                     <Stack align="center">
                         <Image
@@ -85,10 +85,10 @@ export const SubscriptionLinkWidget = ({subscription, supportUrl }: {subscriptio
                             style={{ borderRadius: 'var(--mantine-radius-md)' }}
                         />
                         <Text fw={600} size="lg" ta="center" c="white">
-                            {t('subscription-link.widget.scan-qr-code')}
+                            {t(baseTranslations.scanQrCode)}
                         </Text>
                         <Text c="dimmed" size="sm" ta="center">
-                            {t('subscription-link.widget.line-1')}
+                            {t(baseTranslations.scanQrCodeDescription)}
                         </Text>
 
                         <Button
@@ -98,26 +98,10 @@ export const SubscriptionLinkWidget = ({subscription, supportUrl }: {subscriptio
                             radius="md"
                             leftSection={<IconCopy />}
                         >
-                            {t('subscription-link.widget.copy-link')}
+                            {t(baseTranslations.copyLink)}
                         </Button>
                     </Stack>
-                    // <Stack align="center">
-                    //     <Image
-                    //         src={`data:image/svg+xml;utf8,${encodeURIComponent(subscriptionQrCode)}`}
-                    //     />
-                    //     <Text fw={600} size="lg" ta="center">
-                    //         {t('subscription-link.widget.scan-qr-code')}
-                    //     </Text>
-                    //     <Text c="dimmed" size="sm" ta="center">
-                    //         {t('subscription-link.widget.line-1')}
-                    //     </Text>
-                    //
-                    //     <Button fullWidth onClick={handleCopy} variant="filled">
-                    //         {t('subscription-link.widget.copy-link')}
-                    //     </Button>
-                    // </Stack>
                 )}
-
             </Modal>
             <Group gap="xs">
                 <ActionIcon
@@ -136,22 +120,8 @@ export const SubscriptionLinkWidget = ({subscription, supportUrl }: {subscriptio
                     <IconLink />
                 </ActionIcon>
 
-                {supportUrl && renderSupportLink(supportUrl)}
+                {supportUrl !== '' && renderSupportLink(supportUrl)}
             </Group>
-        {/*<Group gap="xs">*/}
-        {/*    <ActionIcon*/}
-        {/*        onClick={() => {*/}
-        {/*            setOpen(true)*/}
-        {/*        }}*/}
-        {/*        size="xl"*/}
-        {/*        variant="default"*/}
-        {/*    >*/}
-        {/*        <IconLink />*/}
-        {/*    </ActionIcon>*/}
-        {/*    {supportUrl && renderSupportLink(supportUrl)}*/}
-        {/*</Group>*/}
-
         </>
-
     )
 }

@@ -1,46 +1,30 @@
 import {
     EncryptHappCryptoLinkCommand,
+    GetSubpageConfigByShortUuidCommand,
     GetSubscriptionInfoByShortUuidCommand,
     GetUserByTelegramIdCommand,
+    REMNAWAVE_REAL_IP_HEADER
 } from '@remnawave/backend-contract'
-import axios, { AxiosError } from 'axios'
-import {consola} from "consola/browser";
-import { isValid, parse } from '@telegram-apps/init-data-node';
+import { AxiosError } from 'axios'
+import { consola } from 'consola/browser'
+import { isValid, parse } from '@telegram-apps/init-data-node'
+import { instance } from '@/axios/instance'
 
-
-const baseUrl = process.env.REMNAWAVE_PANEL_URL
 const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN!
 const isHappCryptoLinkEnabled = process.env.CRYPTO_LINK === 'true'
 
-const instance = axios.create({
-    baseURL: baseUrl,
-    headers: {
-        Authorization: `Bearer ${process.env.REMNAWAVE_TOKEN}`
-    }
-})
-
-if (baseUrl ? baseUrl.startsWith('http://') : false) {
-    instance.defaults.headers.common['x-forwarded-for'] = '127.0.0.1'
-    instance.defaults.headers.common['x-forwarded-proto'] = 'https'
-}
-
-if (process.env.AUTH_API_KEY) {
-    instance.defaults.headers.common['X-Api-Key'] = `${process.env.AUTH_API_KEY}`
-}
-
 export async function POST(request: Request) {
-
     const parsedBody = await request.json()
     const initData = parsedBody.initData
 
-
     try {
+        const isDataValid = isValid(initData, telegramBotToken)
+        if (!isDataValid)
+            return new Response(JSON.stringify({ error: 'Invalid initData' }), { status: 400 })
 
-        const isDataValid = isValid(initData, telegramBotToken);
-        if (!isDataValid) return new Response(JSON.stringify({ error: 'Invalid initData' }), { status: 400 });
-
-        const { user } = parse(initData);
-        if (!user || !user.id) return new Response(JSON.stringify({ error: 'Invalid user data' }), { status: 400 });
+        const { user } = parse(initData)
+        if (!user || !user.id)
+            return new Response(JSON.stringify({ error: 'Invalid user data' }), { status: 400 })
 
         const result = await instance.request<GetUserByTelegramIdCommand.Response>({
             method: GetUserByTelegramIdCommand.endpointDetails.REQUEST_METHOD,
@@ -62,6 +46,23 @@ export async function POST(request: Request) {
 
         const shortUuid = result.data.response[0].shortUuid
 
+        const subpageConfig = await instance.request<GetSubpageConfigByShortUuidCommand.Response>({
+            method: GetSubpageConfigByShortUuidCommand.endpointDetails.REQUEST_METHOD,
+            url: GetSubpageConfigByShortUuidCommand.url(shortUuid),
+            data: {
+                requestHeaders: {
+                    ...request.headers
+                }
+            }
+        })
+
+        if (subpageConfig.status !== 200) {
+            consola.error('Error API:', subpageConfig.data)
+            return new Response(JSON.stringify({ error: 'Failed to get subscription UUID' }), {
+                status: 500
+            })
+        }
+
         const subscriptionInfo =
             await instance.request<GetSubscriptionInfoByShortUuidCommand.Response>({
                 method: GetSubscriptionInfoByShortUuidCommand.endpointDetails.REQUEST_METHOD,
@@ -77,23 +78,27 @@ export async function POST(request: Request) {
 
         const response = subscriptionInfo.data.response
 
-
         if (isHappCryptoLinkEnabled) {
             // // we need to remove links, ssConfLinks and subscriptionUrl from response
             response.links = []
             response.ssConfLinks = {}
 
-            const subscriptionInfo =
-                await instance.request<EncryptHappCryptoLinkCommand.Response>({
-                    method: EncryptHappCryptoLinkCommand.endpointDetails.REQUEST_METHOD,
-                    url: EncryptHappCryptoLinkCommand.url,
-                    data: { linkToEncrypt: response.subscriptionUrl}
-                })
+            const subscriptionInfo = await instance.request<EncryptHappCryptoLinkCommand.Response>({
+                method: EncryptHappCryptoLinkCommand.endpointDetails.REQUEST_METHOD,
+                url: EncryptHappCryptoLinkCommand.url,
+                data: { linkToEncrypt: response.subscriptionUrl }
+            })
 
             response.subscriptionUrl = subscriptionInfo.data.response.encryptedLink
         }
 
-        return new Response(JSON.stringify(response), { status: 200 })
+        return new Response(
+            JSON.stringify({
+                ...response,
+                subpageConfigUuid: subpageConfig.data.response.subpageConfigUuid
+            }),
+            { status: 200 }
+        )
     } catch (error) {
         if (error instanceof AxiosError) {
             if (error.response?.status === 404) {
