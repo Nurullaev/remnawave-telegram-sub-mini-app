@@ -5,10 +5,11 @@ import components from './overrides'
 export const theme = createTheme({
     components,
     cursorType: 'pointer',
-    fontFamily: 'Montserrat, sans-serif',
+    fontFamily:
+        'Montserrat, Vazirmatn, Apple Color Emoji, Noto Sans SC, Twemoji Country Flags, sans-serif',
     fontFamilyMonospace: 'Fira Mono, monospace',
     breakpoints: {
-        xs: '23em',
+        xs: '25em',
         sm: '30em',
         md: '48em',
         lg: '64em',
@@ -19,7 +20,7 @@ export const theme = createTheme({
     },
     scale: 1,
     fontSmoothing: true,
-    focusRing: 'auto',
+    focusRing: 'never',
     white: '#ffffff',
     black: '#24292f',
     colors: {
@@ -90,7 +91,7 @@ export const theme = createTheme({
     autoContrast: true,
     luminanceThreshold: 0.3,
     headings: {
-        fontFamily: 'Unbounded, sans-serif',
+        fontFamily: 'Unbounded, Vazirmatn, Apple Color Emoji, Noto Sans SC, sans-serif',
         fontWeight: '600'
     },
     defaultRadius: 'md'
