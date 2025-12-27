@@ -7,7 +7,7 @@ import { setLocale } from '@/core/i18n/locale'
 
 interface IProps {
     currentLang: TSubscriptionPageLanguageCode
-    locales: TSubscriptionPageLanguageCode[]
+    locales: TSubscriptionPageLanguageCode[] | []
     onLanguageChange: (lang: TSubscriptionPageLanguageCode) => void
 }
 

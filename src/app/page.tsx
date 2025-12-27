@@ -70,9 +70,6 @@ export default function Home() {
     const os = useOs({ getValueInEffect: false })
     const { appConfig } = useAppConfigStoreInfo()
 
-    const activeSubscription =
-        subscription?.user?.userStatus && subscription?.user?.userStatus === 'ACTIVE'
-
     const hasPlatformApps: Record<TSubscriptionPagePlatformKey, boolean> = {
         ios: Boolean(config.platforms.ios?.apps.length),
         android: Boolean(config.platforms.android?.apps.length),
@@ -87,36 +84,6 @@ export default function Home() {
 
     const SubscriptionInfoBlockRenderer =
         SUBSCRIPTION_INFO_BLOCK_RENDERERS[config.uiConfig.subscriptionInfoBlockType]
-
-    if (!activeSubscription)
-        return (
-            <Box
-                style={{
-                    height: '100vh',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}
-            >
-                <Container size="xl">
-                    <Stack gap="xl">
-                        <Title style={{ textAlign: 'center' }} order={4}>
-                            {t('main.page.component.no-sub')}
-                        </Title>
-                        <SubscribeCta />
-
-                        <Center mt={20}>
-                            <LanguagePicker
-                                currentLang={currentLang}
-                                locales={config.locales}
-                                onLanguageChange={setLanguage}
-                            />
-                        </Center>
-                    </Stack>
-                </Container>
-            </Box>
-        )
 
     return (
         <Box style={{ position: 'relative', marginBottom: 20, padding: 0 }}>

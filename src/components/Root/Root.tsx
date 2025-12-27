@@ -9,7 +9,15 @@ import '@mantine/nprogress/styles.layer.css'
 
 initDayjs()
 
-import { Center, Container, DirectionProvider, MantineProvider, Stack, Title } from '@mantine/core'
+import {
+    Box,
+    Center,
+    Container,
+    DirectionProvider,
+    MantineProvider,
+    Stack,
+    Title
+} from '@mantine/core'
 
 import {
     initData,
@@ -36,22 +44,38 @@ import {
     SubscriptionPageRawConfigSchema,
     TSubscriptionPageRawConfig
 } from '@remnawave/subscription-page-types'
-import { useSubscriptionConfigStoreActions, useIsConfigLoaded } from '@/store/subscriptionConfig'
+import {
+    useSubscriptionConfigStoreActions,
+    useIsConfigLoaded,
+    useCurrentLang,
+    useSubscriptionConfig
+} from '@/store/subscriptionConfig'
 import { ofetch } from 'ofetch'
 import { ErrorConnection } from '@/components/ErrorConnection/ErrorConnection'
 import { initDayjs } from '@/utils/initDayjs'
 import { fetchAppEnv } from '@/api/fetchAppEnv'
 import { useAppConfigStoreActions } from '@/store/appConfig'
+import { Snowfall } from 'react-snowfall'
+import { AnimatedBackground } from '@/components/AnimatedBackground/AnimatedBackground'
+import { Header } from '@/components/Header/Header'
+import { InstallationGuideConnector } from '@/components/InstallationGuide'
+import { SubscribeCta } from '@/components/SubscribeCTA/SubscribeCTA'
+import { LanguagePicker } from '@/components/LanguagePicker/LanguagePicker'
+import { useTranslations } from 'next-intl'
 
 type TConfigsMap = Record<string, TSubscriptionPageRawConfig>
 
 function RootInner({ children }: PropsWithChildren) {
     const lp = useLaunchParams()
+    const t = useTranslations()
     const debug = lp.startParam === 'debug'
     const initDataRaw = useSignal(_initDataRaw)
     const subscriptionActions = useSubscriptionInfoStoreActions()
     const configActions = useSubscriptionConfigStoreActions()
     const appConfigActions = useAppConfigStoreActions()
+    const config = useSubscriptionConfig()
+    const currentLang = useCurrentLang()
+    const { setLanguage } = useSubscriptionConfigStoreActions()
 
     const { subscription } = useSubscriptionInfoStoreInfo()
     const isConfigLoaded = useIsConfigLoaded()
@@ -79,6 +103,9 @@ function RootInner({ children }: PropsWithChildren) {
             setLocale(initDataUser.language_code)
         }
     }, [initDataUser])
+
+    const activeSubscription =
+        subscription?.user?.userStatus && subscription?.user?.userStatus === 'ACTIVE'
 
     useEffect(() => {
         if (initDataRaw) {
@@ -110,8 +137,6 @@ function RootInner({ children }: PropsWithChildren) {
     }, [initDataRaw])
 
     useEffect(() => {
-        if (!subscription) return
-
         const targetUuid = '00000000-0000-0000-0000-000000000000'
         let retryCount = 0
         const maxRetries = 3
@@ -122,7 +147,7 @@ function RootInner({ children }: PropsWithChildren) {
                     query: { v: Date.now() }
                 })
 
-                const configId = subscription.subpageConfigUuid || targetUuid
+                const configId = subscription?.subpageConfigUuid || targetUuid
                 const tempConfig = configs[configId]
 
                 if (!tempConfig) {
@@ -179,6 +204,38 @@ function RootInner({ children }: PropsWithChildren) {
     }, [])
 
     if (isLoading || !isConfigLoaded || !subscription) return <Loading />
+
+    if (!activeSubscription) {
+        // @ts-ignore
+        return (
+            <Box
+                style={{
+                    height: '100vh',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}
+            >
+                <Container size="xl">
+                    <Stack gap="xl">
+                        <Title style={{ textAlign: 'center' }} order={4}>
+                            {t('main.page.component.no-sub')}
+                        </Title>
+                        <SubscribeCta />
+
+                        <Center mt={20}>
+                            <LanguagePicker
+                                currentLang={currentLang}
+                                locales={config.locales ?? []}
+                                onLanguageChange={setLanguage}
+                            />
+                        </Center>
+                    </Stack>
+                </Container>
+            </Box>
+        )
+    }
 
     if (errorConnect)
         return (

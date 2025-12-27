@@ -71,10 +71,7 @@ export const useSubscriptionConfigNullable = () =>
 
 export const useSubscriptionConfig = (): TSubscriptionPageRawConfig => {
     const config = useSubscriptionConfigStore((state) => state.config)
-    if (!config) {
-        throw new Error('useAppConfig must be used after config is loaded (after RootLayout gate)')
-    }
-    return config
+    return config as TSubscriptionPageRawConfig
 }
 
 export const useLocales = () => useSubscriptionConfigStore((state) => state.config!.locales)
