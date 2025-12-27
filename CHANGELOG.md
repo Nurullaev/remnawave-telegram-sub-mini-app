@@ -1,0 +1,17 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [3.1.0](https://github.com/maposia/remnawave-telegram-sub-mini-app/compare/v3.0.0...v3.1.0) (2025-12-27)
+
+
+### Features
+
+* fonts: Vazirmatn for Persian ([30869ab](https://github.com/maposia/remnawave-telegram-sub-mini-app/commit/30869aba5ff232036624dc6e18beb40a28efbbd4))
+
+
+### Bug Fixes
+
+* add scrollbar to language selection dropdown ([c551178](https://github.com/maposia/remnawave-telegram-sub-mini-app/commit/c551178126333ae50e1c5bfec6c1931e8c576e69))
+* fixed: fetch sub config race condition ([05bfaf2](https://github.com/maposia/remnawave-telegram-sub-mini-app/commit/05bfaf28349cc51eec34edd9256ad31e9ffdbab9))
+* show purchase window if there is no account or subscription has expired ([c2790f6](https://github.com/maposia/remnawave-telegram-sub-mini-app/commit/c2790f6e03100adc910cd09eab00c89a09cfe971))
