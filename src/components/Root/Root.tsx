@@ -55,10 +55,6 @@ import { ErrorConnection } from '@/components/ErrorConnection/ErrorConnection'
 import { initDayjs } from '@/utils/initDayjs'
 import { fetchAppEnv } from '@/api/fetchAppEnv'
 import { useAppConfigStoreActions } from '@/store/appConfig'
-import { Snowfall } from 'react-snowfall'
-import { AnimatedBackground } from '@/components/AnimatedBackground/AnimatedBackground'
-import { Header } from '@/components/Header/Header'
-import { InstallationGuideConnector } from '@/components/InstallationGuide'
 import { SubscribeCta } from '@/components/SubscribeCTA/SubscribeCTA'
 import { LanguagePicker } from '@/components/LanguagePicker/LanguagePicker'
 import { useTranslations } from 'next-intl'
@@ -108,13 +104,13 @@ function RootInner({ children }: PropsWithChildren) {
         subscription?.user?.userStatus && subscription?.user?.userStatus === 'ACTIVE'
 
     useEffect(() => {
+        setIsLoading(true)
+
         if (initDataRaw) {
             const fetchSubscription = async () => {
-                // setIsLoading(true)
                 try {
                     const subscription = await fetchUserByTelegramId(initDataRaw as string)
                     if (subscription) {
-                        // setSubscription(user)
                         subscriptionActions.setSubscriptionInfo({
                             subscription
                         })
@@ -127,7 +123,6 @@ function RootInner({ children }: PropsWithChildren) {
                     }
                     consola.error('Failed to fetch subscription:', error)
                 } finally {
-                    // setSubscriptionLoaded(true)
                     setIsLoading(false)
                 }
             }
@@ -170,7 +165,6 @@ function RootInner({ children }: PropsWithChildren) {
                 }
 
                 configActions.setConfig(parsedConfig.data)
-                setIsLoading(false)
             } catch (error: any) {
                 if (error.response?.status === 404 && retryCount < maxRetries) {
                     retryCount++
@@ -180,7 +174,6 @@ function RootInner({ children }: PropsWithChildren) {
 
                 setErrorConnect('ERR_PARSE_APPCONFIG')
                 consola.error('Failed to fetch app config:', error)
-                setIsLoading(false)
             }
         }
 
@@ -203,7 +196,25 @@ function RootInner({ children }: PropsWithChildren) {
         fetchAppConfig()
     }, [])
 
-    if (isLoading || !isConfigLoaded || !subscription) return <Loading />
+    if (errorConnect)
+        return (
+            <Container my="xl" size="xl">
+                <Center>
+                    <Stack gap="xl">
+                        <Title style={{ textAlign: 'center' }} order={4}>
+                            {errorConnect === 'ERR_FATCH_USER'
+                                ? 'Error get user'
+                                : errorConnect === 'ERR_PARSE_APPCONFIG'
+                                  ? 'Error parsing app config'
+                                  : JSON.stringify(errorConnect)}
+                        </Title>
+                        <ErrorConnection />
+                    </Stack>
+                </Center>
+            </Container>
+        )
+
+    if (isLoading || !isConfigLoaded) return <Loading />
 
     if (!activeSubscription) {
         // @ts-ignore
@@ -236,24 +247,6 @@ function RootInner({ children }: PropsWithChildren) {
             </Box>
         )
     }
-
-    if (errorConnect)
-        return (
-            <Container my="xl" size="xl">
-                <Center>
-                    <Stack gap="xl">
-                        <Title style={{ textAlign: 'center' }} order={4}>
-                            {errorConnect === 'ERR_FATCH_USER'
-                                ? 'Error get user'
-                                : errorConnect === 'ERR_PARSE_APPCONFIG'
-                                  ? 'Error parsing app config'
-                                  : JSON.stringify(errorConnect)}
-                        </Title>
-                        <ErrorConnection />
-                    </Stack>
-                </Center>
-            </Container>
-        )
 
     return <>{children}</>
 }
