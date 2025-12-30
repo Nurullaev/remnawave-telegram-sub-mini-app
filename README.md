@@ -17,15 +17,23 @@ The page allows see their subscriptions directly through Telegram. As a requirem
 
 The application requires the following environment variables to be set:
 
-| Variable          | Description                                                                                                                                                                                   |
-|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `REMNAWAVE_PANEL_URL`   | Remnawave Panel URL, can be `http://remnawave:3000` or `https://panel.example.com`                                                                                                            |
-| `REMNAWAVE_TOKEN` | Authentication token for Remnawave API                                                                                                                                                        |
-| `BUY_LINK`        | The URL for purchase actions                                                                                                                                                                  |
-| `CRYPTO_LINK`     | Allows using encrypted links (currently supported Happ application). If no applications supporting cryptolink are present in app-config.json configuration, these links will not be displayed || `REDIRECT_LINK`     | Allows you to specify a **custom redirect page URL** for deep links. Useful for handling protocols like `v2box://` in Telegram Desktop (Windows). For more details and examples, see [Telegram Deep Link Redirect](https://github.com/maposia/redirect-page/tree/main) |
-| `AUTH_API_KEY`        | If you use "Caddy with security" or TinyAuth for Nginx addon, you can place here X-Api-Key, which will be applied to requests to Remnawave Panel.                                             |
-| `TELEGRAM_BOT_TOKEN`        | Telegram bot token                                                                                                                                                                            |
-| `FORCE_SNOWFLAKES`        | Allows snowfall on main page                                                                                                                                                                  |
+| Variable          | Description                                                                                                                                                                                               |
+|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `REMNAWAVE_PANEL_URL`   | Remnawave Panel URL, can be `http://remnawave:3000` or `https://panel.example.com`                                                                                                                        |
+| `REMNAWAVE_TOKEN` | Authentication token for Remnawave API                                                                                                                                                                    |
+| `BUY_LINK`        | The URL for purchase actions                                                                                                                                                                              |
+| `CRYPTO_LINK`     | Allows using encrypted links (currently supported Happ application). If no applications supporting cryptolink are present in app-config.json configuration, these links will not be displayed(true/false) || `REDIRECT_LINK`     | Allows you to specify a **custom redirect page URL** for deep links. Useful for handling protocols like `v2box://` in Telegram Desktop (Windows). For more details and examples, see [Telegram Deep Link Redirect](https://github.com/maposia/redirect-page/tree/main) |
+| `AUTH_API_KEY`        | If you use "Caddy with security" or TinyAuth for Nginx addon, you can place here X-Api-Key, which will be applied to requests to Remnawave Panel.                                                         |
+| `TELEGRAM_BOT_TOKEN`        | Telegram bot token                                                                                                                                                                                        |
+| `FORCE_SNOWFLAKES`        | Allows snowfall on main page(true/false)                                                                                                                                                                  |
+
+
+## Version Support
+
+| Remnawave   | MiniApp |
+|-------------|---------|
+| 1.6 - 2.3.9 | 2.3.4   |
+| 2.4.x       | 3.x.x   |
 ## Plugins and Dependencies
 
 ### Remnawave
@@ -72,8 +80,6 @@ services:
       env_file:
          - .env
       restart: always
-      # volumes:
-      #   - ./app-config.json:/app/public/assets/app-config.json
       ports:
          - '127.0.0.1:3020:3020'
 #      networks:
@@ -84,14 +90,6 @@ services:
 #     name: remnawave-network
 #      driver: bridge
 #      external: true
-```
-
-Uncomment if you want to use your own template downloaded from the Remna panel.
-p.s. file must be placed in the same directory with this docker-compose file
-
-```yaml
-      volumes:
-        - ./app-config.json:/app/public/assets/app-config.json
 ```
 
 Uncomment if you want to use local connection via single network in docker
@@ -114,6 +112,15 @@ networks:
 6. Mini app is now running on http://127.0.0.1:3020
 
 Now we are ready to move on the Reverse Proxy installation.
+
+## Configuring subscription page (optional)
+
+You can customize the subscription page in the Subpage Builder in Remnawave Dashboard. This allows you to:
+
+Add support for different VPN apps
+Customize text and instructions in multiple languages
+Add your own branding (logo, company name, support links)
+Configure which apps appear as "featured"
 
 ## Update Instructions
 
