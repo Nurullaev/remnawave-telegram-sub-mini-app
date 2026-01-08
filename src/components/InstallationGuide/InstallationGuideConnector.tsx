@@ -158,16 +158,18 @@ export const InstallationGuideConnector = (props: IProps) => {
                     }
 
                     // hack-fix for telegram desktop client app. Doesn't support deeplink
-                    const fullUrl = isTDesktop
-                        ? `${appConfig?.redirectLink}${formattedUrl}`
-                        : formattedUrl
 
                     return (
                         <Button
                             key={index}
-                            component={Link}
-                            href={fullUrl}
-                            target="_blank"
+                            onClick={() =>
+                                window.open(
+                                    isTDesktop
+                                        ? `${appConfig?.redirectLink}${formattedUrl}`
+                                        : formattedUrl,
+                                    '_blank'
+                                )
+                            }
                             leftSection={leftSection}
                             radius="md"
                             variant={variant}

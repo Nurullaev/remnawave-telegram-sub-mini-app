@@ -44,3 +44,4 @@ certificates!/certificates/
 
 
 .env
+/public/app-data.json
