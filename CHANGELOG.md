@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.4](https://github.com/maposia/remnawave-telegram-sub-mini-app/compare/v3.1.3...v3.1.4) (2026-01-08)
+
+
+### Bug Fixes
+
+* adding subscription link ([bb0607f](https://github.com/maposia/remnawave-telegram-sub-mini-app/commit/bb0607faf703761e3b344d7e158a2b7ee780b46b))
+
 ### [3.1.3](https://github.com/maposia/remnawave-telegram-sub-mini-app/compare/v3.1.2...v3.1.3) (2026-01-08)
 
 ### [3.1.2](https://github.com/maposia/remnawave-telegram-sub-mini-app/compare/v3.1.1...v3.1.2) (2025-12-30)
