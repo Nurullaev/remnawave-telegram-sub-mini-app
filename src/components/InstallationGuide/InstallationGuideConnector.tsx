@@ -29,6 +29,7 @@ import { vibrate } from '@/utils/vibrate'
 import { useTranslation } from '@/hooks/useTranslations'
 import { useAppConfigStoreInfo } from '@/store/appConfig'
 import { retrieveLaunchParams } from '@telegram-apps/sdk-react'
+import { Link } from '@/components/Link/Link'
 
 export type TBlockVariant = 'accordion' | 'cards' | 'minimal' | 'timeline'
 
@@ -81,53 +82,6 @@ export const InstallationGuideConnector = (props: IProps) => {
 
     const subscriptionUrl = subscription.subscriptionUrl
 
-    const handleButtonClick = (button: TSubscriptionPageButtonConfig) => {
-        let formattedUrl: string | undefined
-
-        if (button.type === 'subscriptionLink' || button.type === 'copyButton') {
-            const isCryptoActive = selectedApp.name === 'Happ' && appConfig?.cryptoLink
-
-            if (isCryptoActive) {
-                formattedUrl = subscriptionUrl
-            } else {
-                formattedUrl = TemplateEngine.formatWithMetaInfo(button.link, {
-                    username: subscription.user.username,
-                    subscriptionUrl
-                })
-            }
-        }
-
-        switch (button.type) {
-            case 'copyButton': {
-                if (!formattedUrl) return
-
-                copy(formattedUrl)
-                notifications.show({
-                    title: t(baseTranslations.linkCopied),
-                    message: t(baseTranslations.linkCopiedToClipboard),
-                    color: 'cyan'
-                })
-                break
-            }
-            case 'external': {
-                window.open(button.link, '_blank')
-                break
-            }
-            case 'subscriptionLink': {
-                if (!formattedUrl) return
-
-                // hack-fix for telegram desktop client app. Doesn't support deeplink
-                const fullUrl = isTDesktop
-                    ? `${appConfig?.redirectLink}${formattedUrl}`
-                    : formattedUrl
-                window.open(fullUrl, '_blank')
-                break
-            }
-            default:
-                break
-        }
-    }
-
     const renderBlockButtons = (
         buttons: TSubscriptionPageButtonConfig[],
         variant: ButtonVariant
@@ -136,24 +90,92 @@ export const InstallationGuideConnector = (props: IProps) => {
 
         return (
             <Group gap="xs" wrap="wrap">
-                {buttons.map((button, index) => (
-                    <Button
-                        key={index}
-                        leftSection={
-                            <span
-                                dangerouslySetInnerHTML={{
-                                    __html: getIconFromLibrary(button.svgIconKey, svgLibrary)
-                                }}
-                                style={{ display: 'flex', alignItems: 'center' }}
-                            />
+                {buttons.map((button, index) => {
+                    let formattedUrl: string | undefined
+                    if (button.type === 'subscriptionLink' || button.type === 'copyButton') {
+                        const isCryptoActive = selectedApp.name === 'Happ' && appConfig?.cryptoLink
+                        if (isCryptoActive) {
+                            formattedUrl = subscriptionUrl
+                        } else {
+                            formattedUrl = TemplateEngine.formatWithMetaInfo(button.link, {
+                                username: subscription.user.username,
+                                subscriptionUrl
+                            })
                         }
-                        onClick={() => handleButtonClick(button)}
-                        radius="md"
-                        variant={variant}
-                    >
-                        {t(button.text)}
-                    </Button>
-                ))}
+                    } else {
+                        formattedUrl = button.link
+                    }
+
+                    const isCopy = button.type === 'copyButton'
+                    const isExternal = button.type === 'external'
+
+                    const leftSection = (
+                        <span
+                            dangerouslySetInnerHTML={{
+                                __html: getIconFromLibrary(button.svgIconKey, svgLibrary)
+                            }}
+                            style={{ display: 'flex', alignItems: 'center' }}
+                        />
+                    )
+
+                    if (isCopy) {
+                        return (
+                            <Button
+                                key={index}
+                                leftSection={leftSection}
+                                onClick={() => {
+                                    if (!formattedUrl) return
+
+                                    copy(formattedUrl)
+                                    notifications.show({
+                                        title: t(baseTranslations.linkCopied),
+                                        message: t(baseTranslations.linkCopiedToClipboard),
+                                        color: 'cyan'
+                                    })
+                                }}
+                                radius="md"
+                                variant={variant}
+                            >
+                                {t(button.text)}
+                            </Button>
+                        )
+                    }
+
+                    if (isExternal) {
+                        return (
+                            <Button
+                                key={index}
+                                component={Link}
+                                href={button.link}
+                                leftSection={leftSection}
+                                target="_blank"
+                                radius="md"
+                                variant={variant}
+                            >
+                                {t(button.text)}
+                            </Button>
+                        )
+                    }
+
+                    // hack-fix for telegram desktop client app. Doesn't support deeplink
+                    const fullUrl = isTDesktop
+                        ? `${appConfig?.redirectLink}${formattedUrl}`
+                        : formattedUrl
+
+                    return (
+                        <Button
+                            key={index}
+                            component={Link}
+                            href={fullUrl}
+                            target="_blank"
+                            leftSection={leftSection}
+                            radius="md"
+                            variant={variant}
+                        >
+                            {t(button.text)}
+                        </Button>
+                    )
+                })}
             </Group>
         )
     }

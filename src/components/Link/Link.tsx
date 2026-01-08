@@ -1,43 +1,44 @@
 'use client'
 
-import { openLink } from '@telegram-apps/sdk-react';
-import { type FC, type MouseEventHandler, type JSX, useCallback } from 'react';
-import { type LinkProps as NextLinkProps, default as NextLink } from 'next/link';
+import { openLink, retrieveLaunchParams } from '@telegram-apps/sdk-react'
+import { type FC, type MouseEventHandler, type JSX, useCallback } from 'react'
+import { type LinkProps as NextLinkProps, default as NextLink } from 'next/link'
+import { useAppConfigStoreInfo } from '@/store/appConfig'
 
 export interface LinkProps extends NextLinkProps, Omit<JSX.IntrinsicElements['a'], 'href'> {}
 
 export const Link: FC<LinkProps> = ({ className, onClick: propsOnClick, href, ...rest }) => {
     const onClick = useCallback<MouseEventHandler<HTMLAnchorElement>>(
         (e) => {
-            propsOnClick?.(e);
+            propsOnClick?.(e)
 
             // Проверяем, что мы находимся на клиентской стороне
             if (typeof window === 'undefined') {
-                return;
+                return
             }
 
             // Compute if target path is external. In this case we would like to open link using
             // TMA method.
-            let path: string;
+            let path: string
             if (typeof href === 'string') {
-                path = href;
+                path = href
             } else {
-                const { search = '', pathname = '', hash = '' } = href;
-                path = `${pathname}?${search}#${hash}`;
+                const { search = '', pathname = '', hash = '' } = href
+                path = `${pathname}?${search}#${hash}`
             }
 
-            const targetUrl = new URL(path, window.location.toString());
-            const currentUrl = new URL(window.location.toString());
+            const targetUrl = new URL(path, window.location.toString())
+            const currentUrl = new URL(window.location.toString())
             const isExternal =
-                targetUrl.protocol !== currentUrl.protocol || targetUrl.host !== currentUrl.host;
+                targetUrl.protocol !== currentUrl.protocol || targetUrl.host !== currentUrl.host
 
             if (isExternal) {
-                e.preventDefault();
-                openLink(targetUrl.toString());
+                e.preventDefault()
+                openLink(targetUrl.toString())
             }
         },
-        [href, propsOnClick],
-    );
+        [href, propsOnClick]
+    )
 
-    return <NextLink {...rest} href={href} onClick={onClick} className={className} />;
-};
+    return <NextLink {...rest} href={href} onClick={onClick} className={className} />
+}
