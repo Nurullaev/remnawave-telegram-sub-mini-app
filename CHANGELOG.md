@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.5](https://github.com/maposia/remnawave-telegram-sub-mini-app/compare/v3.1.4...v3.1.5) (2026-01-09)
+
+
+### Features
+
+* add multi-bot support ([996c265](https://github.com/maposia/remnawave-telegram-sub-mini-app/commit/996c2654f2af2625e9b2d89d551ecb230607d84a))
+
 ### [3.1.4](https://github.com/maposia/remnawave-telegram-sub-mini-app/compare/v3.1.3...v3.1.4) (2026-01-08)
 
 
