@@ -2,8 +2,7 @@ import {
     EncryptHappCryptoLinkCommand,
     GetSubpageConfigByShortUuidCommand,
     GetSubscriptionInfoByShortUuidCommand,
-    GetUserByTelegramIdCommand,
-    REMNAWAVE_REAL_IP_HEADER
+    GetUserByTelegramIdCommand
 } from '@remnawave/backend-contract'
 import { AxiosError } from 'axios'
 import { consola } from 'consola/browser'
@@ -14,11 +13,23 @@ const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN!
 const isHappCryptoLinkEnabled = process.env.CRYPTO_LINK === 'true'
 
 export async function POST(request: Request) {
+    console.log(telegramBotToken.split(','))
+
+    const botTokens = telegramBotToken.split(',')
+
     const parsedBody = await request.json()
     const initData = parsedBody.initData
 
     try {
-        const isDataValid = isValid(initData, telegramBotToken)
+        let isDataValid = false
+
+        botTokens.forEach((botToken) => {
+            if (isValid(initData, botToken)) {
+                isDataValid = true
+                return
+            }
+        })
+
         if (!isDataValid)
             return new Response(JSON.stringify({ error: 'Invalid initData' }), { status: 400 })
 

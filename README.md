@@ -25,7 +25,7 @@ The application requires the following environment variables to be set:
 | `CRYPTO_LINK`     | Allows using encrypted links (currently supported Happ application). If no applications supporting cryptolink are present in app-config.json configuration, these links will not be displayed(true/false) || `REDIRECT_LINK`     | Allows you to specify a **custom redirect page URL** for deep links. Useful for handling protocols like `v2box://` in Telegram Desktop (Windows). For more details and examples, see [Telegram Deep Link Redirect](https://github.com/maposia/redirect-page/tree/main) |
 | `AUTH_API_KEY`        | If you use "Caddy with security" or TinyAuth for Nginx addon, you can place here X-Api-Key, which will be applied to requests to Remnawave Panel.                                                         |
 | `REDIRECT_LINK`        | Use this link to fix deeplink issues on Windows. It bypasses OS-level restrictions. More details https://github.com/maposia/redirect-page                                                                 |
-| `TELEGRAM_BOT_TOKEN`        | Telegram bot token                                                                                                                                                                                        |
+| `TELEGRAM_BOT_TOKEN`        | Telegram bot token(allow multiple, see .env.example)                                                                                                                                                      |
 | `FORCE_SNOWFLAKES`        | Allows snowfall on main page(true/false)                                                                                                                                                                  |
 
 
