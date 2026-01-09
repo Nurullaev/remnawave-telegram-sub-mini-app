@@ -13,8 +13,6 @@ const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN!
 const isHappCryptoLinkEnabled = process.env.CRYPTO_LINK === 'true'
 
 export async function POST(request: Request) {
-    console.log(telegramBotToken.split(','))
-
     const botTokens = telegramBotToken.split(',')
 
     const parsedBody = await request.json()
