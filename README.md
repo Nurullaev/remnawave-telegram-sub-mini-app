@@ -135,3 +135,22 @@ Configure which apps appear as "featured"
    ```bash
    docker compose down && docker compose up -d
    ```
+
+## Contributing
+
+We welcome contributions, especially in making the app accessible to more users!
+
+### Adding New Translations
+If you want to add a new language for "no sub or need buy" page :
+
+1.  **Add the translation file:**
+    Create a new JSON file in `public/locales/{languageTag}.json` with your translations.
+
+2.  **Register the new locale:**
+    Open `src/core/i18n/config.ts` and add your language tag to the `locales` array:
+    ```typescript
+    export const locales = [defaultLocale, 'ru', '{languageTag}'] as const;
+    ```
+
+> [!TIP]
+> **Note on Language Tags:** The `{languageTag}` must match the tag used in your **Remnawave Panel** settings under the **Subscription Page** configuration section.
