@@ -90,6 +90,20 @@ export async function register() {
             const obj = Object.fromEntries(subpageConfigMap)
             fs.writeFileSync(filePath, JSON.stringify(obj, null, 2))
             consola.log('✅ Subscription configs have been successfully added to the application')
+            const version = process.env.npm_package_version || 'unknown'
+            const label = `Reway subscription mini app v${version} started`
+
+            const green = '\x1b[32m'
+            const bold = '\x1b[1m'
+            const reset = '\x1b[0m'
+
+            const line = '━'.repeat(label.length + 8)
+
+            console.log(`
+${green}${bold}┏${line}┓
+┃    ${label}    ┃
+┗${line}┛${reset}
+`)
         } catch (error) {
             // @ts-ignore
             consola.error('❌ Error initial subscription config:', error.message)
