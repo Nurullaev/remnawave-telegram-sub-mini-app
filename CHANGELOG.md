@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/maposia/remnawave-telegram-sub-mini-app/compare/v3.1.9...v3.2.0) (2026-02-03)
+
+
+### Bug Fixes
+
+* update QR code display when cryptolink is enabled ([2825a01](https://github.com/maposia/remnawave-telegram-sub-mini-app/commit/2825a0140fd4af1d3feffe2ac265b0415f4fc9d2))
+
 ### [3.1.9](https://github.com/maposia/remnawave-telegram-sub-mini-app/compare/v3.1.8...v3.1.9) (2026-01-09)
 
 
