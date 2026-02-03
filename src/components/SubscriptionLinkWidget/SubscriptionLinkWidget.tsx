@@ -14,10 +14,12 @@ import { renderSVG } from 'uqr'
 import { useState } from 'react'
 import { useTranslation } from '@/hooks/useTranslations'
 import { useSubscription } from '@/store/subscriptionInfo'
+import { useAppConfigStoreInfo } from '@/store/appConfig'
 
 export const SubscriptionLinkWidget = ({ supportUrl }: { supportUrl: string }) => {
     const { t, baseTranslations } = useTranslation()
     const subscription = useSubscription()
+    const { appConfig } = useAppConfigStoreInfo()
 
     const clipboard = useClipboard({ timeout: 10000 })
 
@@ -87,19 +89,24 @@ export const SubscriptionLinkWidget = ({ supportUrl }: { supportUrl: string }) =
                         <Text fw={600} size="lg" ta="center" c="white">
                             {t(baseTranslations.scanQrCode)}
                         </Text>
-                        <Text c="dimmed" size="sm" ta="center">
-                            {t(baseTranslations.scanQrCodeDescription)}
-                        </Text>
 
-                        <Button
-                            fullWidth
-                            onClick={handleCopy}
-                            variant="light"
-                            radius="md"
-                            leftSection={<IconCopy />}
-                        >
-                            {t(baseTranslations.copyLink)}
-                        </Button>
+                        {!appConfig?.cryptoLink && (
+                            <>
+                                <Text c="dimmed" size="sm" ta="center">
+                                    {t(baseTranslations.scanQrCodeDescription)}
+                                </Text>
+
+                                <Button
+                                    fullWidth
+                                    onClick={handleCopy}
+                                    variant="light"
+                                    radius="md"
+                                    leftSection={<IconCopy />}
+                                >
+                                    {t(baseTranslations.copyLink)}
+                                </Button>
+                            </>
+                        )}
                     </Stack>
                 )}
             </Modal>

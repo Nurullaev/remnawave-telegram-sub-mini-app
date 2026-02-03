@@ -103,7 +103,6 @@ export async function register() {
 
             const line = '━'.repeat(label.length + 4)
 
-            // Печатаем каждую строку отдельно с цветом
             console.log(`${green}${bold}┏${line}┓${reset}`)
             console.log(`${green}${bold}┃  ${label}  ┃${reset}`)
             console.log(`${green}${bold}┗${line}┛${reset}`)

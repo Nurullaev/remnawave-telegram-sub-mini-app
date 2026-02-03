@@ -1,18 +1,12 @@
-import { Box, Center, Container, Flex, Group, Image, Stack, Title } from '@mantine/core'
+import { Box, Group, Image, Title } from '@mantine/core'
 import classes from '@/app/app.module.css'
-import {
-    useSubscriptionConfig,
-    useSubscriptionConfigStoreActions,
-    useCurrentLang
-} from '@/store/subscriptionConfig'
+import { useSubscriptionConfig } from '@/store/subscriptionConfig'
 
 import { RemnawaveLogo } from '@/components/RemnawaveLogo/RemnawaveLogo'
 import { SubscriptionLinkWidget } from '@/components/SubscriptionLinkWidget/SubscriptionLinkWidget'
-import { useAppConfigStoreInfo } from '@/store/appConfig'
 
 export function Header() {
     const config = useSubscriptionConfig()
-    const { appConfig } = useAppConfigStoreInfo()
 
     const brandName = config.brandingSettings.title
     let hasCustomLogo = !!config.brandingSettings.logoUrl
@@ -47,9 +41,7 @@ export function Header() {
                 </Group>
 
                 <Group gap="xs">
-                    {!appConfig?.cryptoLink && (
-                        <SubscriptionLinkWidget supportUrl={config.brandingSettings.supportUrl} />
-                    )}
+                    <SubscriptionLinkWidget supportUrl={config.brandingSettings.supportUrl} />
                 </Group>
             </Group>
         </Box>
