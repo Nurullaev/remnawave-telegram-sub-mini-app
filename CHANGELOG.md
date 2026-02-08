@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.1](https://github.com/maposia/remnawave-telegram-sub-mini-app/compare/v3.2.0...v3.2.1) (2026-02-08)
+
+
+### Features
+
+* add custom subdomain support for subscription links ([78453ce](https://github.com/maposia/remnawave-telegram-sub-mini-app/commit/78453cefca14a02f4908ce0f9770e07a469a6fd5))
+
 ## [3.2.0](https://github.com/maposia/remnawave-telegram-sub-mini-app/compare/v3.1.9...v3.2.0) (2026-02-03)
 
 
