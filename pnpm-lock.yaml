@@ -30,11 +30,11 @@ importers:
         specifier: ^8.3.10
         version: 8.3.10(@mantine/core@8.3.10(@mantine/hooks@8.3.10(react@19.1.1))(@types/react@19.1.9)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(@mantine/hooks@8.3.10(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@remnawave/backend-contract':
-        specifier: 2.4.1
-        version: 2.4.1
+        specifier: 2.6.0
+        version: 2.6.0
       '@remnawave/subscription-page-types':
-        specifier: ^0.3.3
-        version: 0.3.3
+        specifier: ^0.4.0
+        version: 0.4.0
       '@tabler/icons-react':
         specifier: ^3.31.0
         version: 3.34.1(react@19.1.1)
@@ -522,11 +522,11 @@ packages:
     resolution: {integrity: sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
 
-  '@remnawave/backend-contract@2.4.1':
-    resolution: {integrity: sha512-bMqJOa+BOLuUKijQugW1OrWkxkhCePt0wCnGtCrQSliVlX33T9A+VfLRfSoy60tqcjAKATAGG4rTyx/synV2fA==}
+  '@remnawave/backend-contract@2.6.0':
+    resolution: {integrity: sha512-FflB8IBKNE6lGKx7VyDWbGtYcWyWufD0e2VVjh3zLEJFA0ntpE/3n9ov17fYNcjkYjVi0qI0Mr99VlzB1Ff53g==}
 
-  '@remnawave/subscription-page-types@0.3.3':
-    resolution: {integrity: sha512-r4W2UqJ9jvyAoV+dp+ORAov471Qj4VVaVrTyC6rMcyAayIdOUnlivLRz/cpLJ4aa8NNnSFyl+d3OZwE63T829g==}
+  '@remnawave/subscription-page-types@0.4.0':
+    resolution: {integrity: sha512-aQ7JvyKOVS5sTPscaD4rfDrcoESwmqB+/0lei1LTsD3EMY/GHjVwizVKvAoSv0L9X7wzCbxUJazYRP4Pc+UIRg==}
 
   '@rtsao/scc@1.1.0':
     resolution: {integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==}
@@ -3459,11 +3459,11 @@ snapshots:
 
   '@pkgr/core@0.2.9': {}
 
-  '@remnawave/backend-contract@2.4.1':
+  '@remnawave/backend-contract@2.6.0':
     dependencies:
       zod: 3.25.76
 
-  '@remnawave/subscription-page-types@0.3.3':
+  '@remnawave/subscription-page-types@0.4.0':
     dependencies:
       zod: 3.25.76
 
