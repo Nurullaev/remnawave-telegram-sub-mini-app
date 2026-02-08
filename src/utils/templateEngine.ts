@@ -11,7 +11,9 @@ export class TemplateEngine {
     ): string {
         return this.replace(template, {
             USERNAME: metaInfo.username,
-            SUBSCRIPTION_LINK: metaInfo.subscriptionUrl
+            SUBSCRIPTION_LINK: metaInfo.subscriptionUrl,
+            HAPP_CRYPT3_LINK: undefined,
+            HAPP_CRYPT4_LINK: undefined
         })
     }
 
