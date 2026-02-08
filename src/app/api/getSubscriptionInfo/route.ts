@@ -1,5 +1,8 @@
 import {
     EncryptHappCryptoLinkCommand,
+    GetExternalSquadByUuidCommand,
+    GetExternalSquadsCommand,
+    GetInternalSquadByUuidCommand,
     GetSubpageConfigByShortUuidCommand,
     GetSubscriptionInfoByShortUuidCommand,
     GetUserByTelegramIdCommand
@@ -11,6 +14,7 @@ import { instance } from '@/axios/instance'
 
 const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN!
 const isHappCryptoLinkEnabled = process.env.CRYPTO_LINK === 'true'
+const isCustomSubdomain = process.env.CUSTOM_SUB_DOMAIN === 'true'
 
 export async function POST(request: Request) {
     const botTokens = telegramBotToken.split(',')
@@ -86,6 +90,25 @@ export async function POST(request: Request) {
         }
 
         const response = subscriptionInfo.data.response
+
+        if (isCustomSubdomain) {
+            const externalSquadId = result.data.response[0].externalSquadUuid
+            if (externalSquadId) {
+                const externalSquad =
+                    await instance.request<GetExternalSquadByUuidCommand.Response>({
+                        method: GetExternalSquadByUuidCommand.endpointDetails.REQUEST_METHOD,
+                        url: GetExternalSquadByUuidCommand.url(externalSquadId)
+                    })
+                const customSubscriptionDomain =
+                    externalSquad.data.response.responseHeaders?.['X-Subscription-Domain']
+
+                if (customSubscriptionDomain) {
+                    const url = new URL(response.subscriptionUrl)
+                    const customDomain = new URL(customSubscriptionDomain)
+                    response.subscriptionUrl = `${customDomain.origin}${url.pathname}`
+                }
+            }
+        }
 
         if (isHappCryptoLinkEnabled) {
             // // we need to remove links, ssConfLinks and subscriptionUrl from response

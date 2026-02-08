@@ -27,6 +27,7 @@ The application requires the following environment variables to be set:
 | `REDIRECT_LINK`        | Use this link to fix deeplink issues on Windows. It bypasses OS-level restrictions. More details https://github.com/maposia/redirect-page                                                                 |
 | `TELEGRAM_BOT_TOKEN`        | Telegram bot token(allow multiple, see .env.example)                                                                                                                                                      |
 | `FORCE_SNOWFLAKES`        | Allows snowfall on main page(true/false)                                                                                                                                                                  |
+| `CUSTOM_SUB_DOMAIN`       | Enables custom subdomain functionality for subscription links (true/false)                                                                                                                               |
 
 
 ## Version Support
@@ -122,6 +123,27 @@ Add support for different VPN apps
 Customize text and instructions in multiple languages
 Add your own branding (logo, company name, support links)
 Configure which apps appear as "featured"
+
+## Custom Subdomain Configuration (optional)
+
+When `CUSTOM_SUB_DOMAIN=true`, you can use custom domains for subscription links by configuring response headers in external squads.
+
+### Setup Instructions:
+
+1. Set `CUSTOM_SUB_DOMAIN=true` in your environment variables
+2. In the Remnawave Panel, navigate to the external squad configuration
+3. Add a response header with the following specifications:
+   - **Header Name**: `X-Subscription-Domain`
+   - **Header Value**: Your custom domain URL (e.g., `https://custom-domain.com`)
+
+### How it works:
+
+When enabled, the system will:
+- Extract the path from the original subscription URL (e.g., `/sSwssdWxe6wPuC`)
+- Replace the domain with your custom domain from the header
+- Preserve the original path, resulting in URLs like: `https://custom-domain.com/sSwssdWxe6wPuC`
+
+This allows you to serve subscription links through your own domain while maintaining the original subscription paths.
 
 ## Update Instructions
 
